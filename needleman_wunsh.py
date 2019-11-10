@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     try:
         config = parser.load_config(args.config_path)
-    except json.JSONDecodeError, ConfigError as e:
+    except (json.JSONDecodeError, ConfigError) as e:
         logging.error(e)
         sys.exit(1)
 
@@ -44,7 +44,3 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print(f'Score: {score}\nPaths written: {saved_paths}')
-
-
-    # TODO
-    # complicated tests

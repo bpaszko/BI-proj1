@@ -92,7 +92,6 @@ def test_simple_value_after_order_switch():
     v2 = m[-1, -1]
     assert v1 == v2
 
-
 ############## SAVING ####################
 
 def test_check_number_saved_paths(tmpdir):
@@ -131,6 +130,24 @@ def test_check_saving_less_paths(tmpdir):
     _ = gc.run_save(seq1, seq2, path)
     with open(path) as f:
         assert f.read() == 'SCORE = 9\n\n-MAR-S\nSMART-\n'
+
+def test_low_penalty_gap(tmpdir):
+    path = tmpdir.join("output.txt")
+    gc = GenomCompare(same=5, diff=-5, gp=-2, max_paths=100, max_seq_len=100)
+    seq1 = 'SAM'
+    seq2 = 'SUM'
+    _ = gc.run_save(seq1, seq2, path)
+    with open(path) as f:
+        assert f.read() == 'SCORE = 6\n\nS-AM\nSU-M\n\nSA-M\nS-UM\n'
+
+def test_high_penalty_gap(tmpdir):
+    path = tmpdir.join("output.txt")
+    gc = GenomCompare(same=5, diff=-5, gp=-10, max_paths=100, max_seq_len=100)
+    seq1 = 'SAM'
+    seq2 = 'SUM'
+    _ = gc.run_save(seq1, seq2, path)
+    with open(path) as f:
+        assert f.read() == 'SCORE = 5\n\nSAM\nSUM\n'
 
 
 ############# SEQUENCE LENGTH ###############
